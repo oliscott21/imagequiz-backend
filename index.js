@@ -44,7 +44,9 @@ app.post("/login", (request, response) => {
 });
 
 app.get("/flowers", (request, response) => {
-
+    let result = store.getFlowers();
+    response.status(200).json(
+      {done: true, result: result.flowers, message: result.message});
 });
 
 app.get("/quiz/:id", (request, response) => {
@@ -53,6 +55,32 @@ app.get("/quiz/:id", (request, response) => {
     if (result.done) {
       response.status(200).json(
         {done: true, result: result.quiz, message: "A quiz with this name was found"});
+    } else {
+      response.status(404).json(
+        {done: false, result: undefined, message: result.message});
+    }
+});
+
+app.post("/score", (request, response) => {
+    let quizTaker = request.body.quizTaker;
+    let quizName = request.body.quizName;
+    let score = request.body.score;
+
+    store.addScore(quizTaker, quizName, score);
+
+    response.status(200).json(
+      {done: true, message: "Score added successfully!"});
+});
+
+app.get("/scores/:quiztaker/:quizname", (request, response) => {
+    let quizTaker = request.params.quiztaker;
+    let quizName = request.params.quizname;
+
+    let result = store.getScores(quizTaker, quizName);
+
+    if (result.done) {
+      response.status(200).json(
+        {done: true, result: result.ret, message: result.message});
     } else {
       response.status(404).json(
         {done: false, result: undefined, message: result.message});
