@@ -48,7 +48,7 @@ app.get("/flowers", (request, response) => {
     let result = store.getFlowers();
     response.status(200).json(
       {done: true, result: result.flowers, message: result.message});
-    return {"done": "true"};
+    return JSON.stringify({done: true, result: result.flowers, message: result.message});
 });
 
 app.get("/quiz/:id", (request, response) => {
