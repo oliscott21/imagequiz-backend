@@ -1,13 +1,14 @@
+//dependacies
 const express = require("express");
 let { store } = require("./temp-store/store");
 
-
 const app = express();
-const port = 4002;
+const port = process.env.PORT || 4002;
 
 //middlewares
 app.use(express.json());
 
+//methods
 app.get("/", (request, response) => {
     response.status(200).json({done: true, message: "Fine!"});
 });
