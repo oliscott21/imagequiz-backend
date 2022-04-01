@@ -3,10 +3,12 @@ const express = require("express");
 let { store } = require("./temp-store/store");
 
 const app = express();
+const cors = require("cors");
 const port = process.env.PORT || 4002;
 
 //middlewares
 app.use(express.json());
+app.use(cors());
 
 //methods
 app.get("/", (request, response) => {
@@ -48,7 +50,6 @@ app.get("/flowers", (request, response) => {
     let result = store.getFlowers();
     response.status(200).json(
       {done: true, result: result.flowers, message: result.message});
-    return JSON.stringify({done: true, result: result.flowers, message: result.message});
 });
 
 app.get("/quiz/:id", (request, response) => {
