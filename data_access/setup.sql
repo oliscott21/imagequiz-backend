@@ -21,7 +21,7 @@ create table imagequiz.question
 (
 	id bigserial primary key,
 	picture varchar(400) not null,
-	choices varchar(300) not null unique,
+	choices varchar(300) not null,
 	answer varchar(100) not null
 );
 

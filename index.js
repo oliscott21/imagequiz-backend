@@ -1,6 +1,6 @@
 //dependacies
 const express = require("express");
-let { store } = require("./temp-store/store");
+let { store } = require("./data_access/store");
 
 const app = express();
 const cors = require("cors");
@@ -20,30 +20,33 @@ app.post("/register", (request, response) => {
     let email = request.body.email;
     let password = request.body.password;
 
-    let result = store.addCustomer(name, email, password);
-
-    if (result.valid) {
-      response.status(200).json(
-        {done: true, message: "Customer was added successfully!"});
-    } else {
-      response.status(409).json(
-        {done: false, message: "Customer already exists!"});
-    }
+    store.addCustomer(name, email, password)
+    .then(x => response.status(200).json({done: true, message: "Customer was added successfully!"})
+    )
+    .catch(e => {
+      console.log(e);
+      response.status(500).json({done: false, message: "Something went wrong."});
+    });
 });
 
 app.post("/login", (request, response) => {
     let email = request.body.email;
     let password = request.body.password;
 
-    let result = store.login(email, password);
-
-    if (result.valid) {
-      response.status(200).json(
-        {done: true, message: "Customer logged in successfully!"});
-    } else {
-      response.status(401).json(
-        {done: false, message: result.message});
-    }
+    store.login(email, password)
+    .then(x => {
+      if (x.valid) {
+        response.status(200).json(
+          {done: true, message: "Customer logged in successfully!"});
+      } else {
+        response.status(401).json(
+          {done: false, message: x.message});
+      }
+    })
+    .catch(e => {
+      console.log(e);
+      response.status(500).json({done: false, message: "Something went wrong."});
+    });
 });
 
 app.get("/flowers", (request, response) => {
@@ -52,16 +55,22 @@ app.get("/flowers", (request, response) => {
       {done: true, result: result.flowers, message: result.message});
 });
 
-app.get("/quiz/:id", (request, response) => {
-    let id = request.params.id;
-    let result = store.getQuiz(id);
-    if (result.done) {
-      response.status(200).json(
-        {done: true, result: result.quiz, message: "A quiz with this name was found"});
-    } else {
-      response.status(404).json(
-        {done: false, result: undefined, message: result.message});
-    }
+app.get("/quiz/:name", (request, response) => {
+    let name = request.params.name;
+    store.getQuiz(name)
+    .then(x => {
+        if (x) {
+          response.status(200).json(
+            {done: true, result: x, message: "A quiz with this name was found"});
+        } else {
+          response.status(404).json(
+            {done: false, result: undefined, message: "No quiz with this name found!"});
+        }
+    })
+    .catch(e => {
+      console.log(e);
+      response.status(500).json({done: false, message: "Something went wrong."});
+    });
 });
 
 app.post("/score", (request, response) => {
