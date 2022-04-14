@@ -37,7 +37,13 @@ let store = {
 
 //still needs work
   getFlowers: () => {
-    return {done: true, flowers, message: "Got all flowers"};
+    return pool.query(`select * from imagequiz.flowers`)
+    .then(x => {
+      let quiz = x.rows.map(y => {
+        return {name: y.name, picture: y.picture}
+      })
+      return quiz;
+    });
   },
 
   getQuiz: (name) => {
@@ -62,6 +68,8 @@ let store = {
   },
 
   addScore: (quizTaker, quizName, score) => {
+    pool.query()
+    
     scores.push(
       {quizTaker: quizTaker, quizName: quizName, score: score});
   },

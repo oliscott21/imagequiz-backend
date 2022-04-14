@@ -50,9 +50,15 @@ app.post("/login", (request, response) => {
 });
 
 app.get("/flowers", (request, response) => {
-    let result = store.getFlowers();
-    response.status(200).json(
-      {done: true, result: result.flowers, message: result.message});
+    store.getFlowers()
+    .then(x => {
+      response.status(200).json(
+        {done: true, result: x, message: "Got all flowers"});
+    })
+    .catch(e => {
+      console.log(e);
+      response.status(500).json({done: false, message: "Something went wrong."});
+    });
 });
 
 app.get("/quiz/:name", (request, response) => {
