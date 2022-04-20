@@ -35,7 +35,6 @@ let store = {
     });
   },
 
-//still needs work
   getFlowers: () => {
     return pool.query(`select * from imagequiz.flowers`)
     .then(x => {
@@ -68,8 +67,8 @@ let store = {
   },
 
   addScore: (quizTaker, quizName, score) => {
-    pool.query()
-    
+    pool.query();
+
     scores.push(
       {quizTaker: quizTaker, quizName: quizName, score: score});
   },
