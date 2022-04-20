@@ -78,6 +78,7 @@ app.get("/quiz/:name", (request, response) => {
       response.status(500).json({done: false, message: "Something went wrong."});
     });
 });
+//
 
 app.post("/score", (request, response) => {
     let quizTaker = request.body.quizTaker;
