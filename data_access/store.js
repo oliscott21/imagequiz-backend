@@ -68,7 +68,7 @@ let store = {
   },
 
 checkScore: (quizTaker) => {
-  return pool.query(`select q.id as user_id from imagequiz.customer where lower(q.email) = $1`, [quizTaker.toLowerCase()]);
+  return pool.query(`select q.id as user_id from imagequiz.customer q where lower(q.email) = $1`, [quizTaker.toLowerCase()]);
 },
 
 addScore: (quizTaker, quizName, score) => {
