@@ -101,6 +101,7 @@ app.post("/score", (request, response) => {
                 }
             })
         } else {
+            console.log(x);
             response.status(404).json({done: false, result: undefined, message: x.message});
         }
     })
