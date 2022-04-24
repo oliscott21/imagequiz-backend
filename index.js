@@ -12,7 +12,7 @@ app.use(cors());
 
 //methods
 app.get("/", (request, response) => {
-    response.status(200).json({done: true, message: "Fine!"});
+    response.status(200).json({done: true, message: "Fine"});
 });
 
 app.post("/register", (request, response) => {
