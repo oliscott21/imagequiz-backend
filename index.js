@@ -93,6 +93,7 @@ app.post("/score", (request, response) => {
 
     store.checkScore(quizTaker)
     .then(x => {
+        console.log(1);
         store.addScore(x.rows[0].user_id, quizName, score)
         .then(y => {
             if (y.rows.length > 0){
