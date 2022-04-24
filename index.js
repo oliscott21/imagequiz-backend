@@ -21,14 +21,7 @@ app.post("/register", (request, response) => {
     let password = request.body.password;
 
     store.addCustomer(name, email, password)
-    .then(x => {
-        if (x.rows.length > 0) {
-              response.status(201).json({done: true, result: "Customer added successfully!"});
-          } else {
-              response.status(403).json({done: false, result: "Customer already exists!"});
-          }
-      }
-    )
+    .then(x => response.status(200).json({ done: true, message: 'The customer was added successfully!' }))
     .catch(e => {
       console.log(e);
       response.status(500).json({done: false, message: "Something went wrong."});
