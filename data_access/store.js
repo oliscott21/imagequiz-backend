@@ -67,9 +67,8 @@ let store = {
     });
   },
 
-checkScore: (quizTaker, quizName) => {
-  return pool.query(`select q.id as user_id, qq.id as quiz_id from imagequiz.customer
-  q join imagequiz.quiz qq on lower(q.email) = $1 and lower(qq.name) = $2`, [quizTaker.toLowerCase(), quizName.toLowerCase()])
+checkScore: (quizTaker) => {
+  return pool.query(`select q.id as user_id from imagequiz.customer where lower(q.email) = $1`, [quizTaker.toLowerCase()]);
 },
 
 addScore: (quizTaker, quizName, score) => {

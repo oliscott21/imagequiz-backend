@@ -91,10 +91,10 @@ app.post("/score", (request, response) => {
     let quizName = request.body.quizName;
     let score = request.body.score;
 
-    store.checkScore(quizTaker, quizName)
+    store.checkScore(quizTaker)
     .then(x => {
         console.log(x);
-        store.addScore(x.rows[0].user_id, x.rows[0].quiz_id, score)
+        store.addScore(x.rows[0].user_id, quizName, score)
         .then(y => {
             if (y.rows.length > 0){
                 response.status(201).json({done: true, message: "Score added successfully!"});
