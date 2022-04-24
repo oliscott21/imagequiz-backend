@@ -67,6 +67,18 @@ let store = {
     });
   },
 
+checkScore: (quizTaker, quizName) => {
+  return pool.query(`select q.id as user_id, qq.id as quiz_id from imagequiz.customer
+  q join imagequiz.quiz qq on lower(q.email) = $1 and lower(qq.name) = $2`, [quizTaker.toLowerCase(), quizName.toLowerCase()])
+  .then(x => {
+      if (x.rows.length > 0) {
+          return {done: true, result: x, message:"Score successfully added!"}
+      } else {
+          return {done: false, result:undefined, message: "Quiz or Taker do not exist!"};
+      }
+  })
+},
+
 /*
 id bigserial primary key,
 quiz_id int references imagequiz.quiz(id),
@@ -74,37 +86,15 @@ customer_id int references imagequiz.customer(id),
 score float8 not null,
 date timestamp not null
 */
-
-  addScore: (quizTaker, quizName, score) => {
-    let temp = pool.query(`select q.id from imagequiz.customer q join qq.id
-    from imagequiz.quiz where lower(q.name) = $1 and lower(qq.name) = $2`, [quizTaker.toLowerCase(), quizName.toLowerCase()])
-    .then(x => {
-        console.log(x.rows);
-    });
-
-    //let temp2 = pool.query(`select q.id from imagequiz.quiz q
-      //where name = quizName`)
-    return temp;
-/*
-    scores.push(
-      {quizTaker: quizTaker, quizName: quizName, score: score});
-      */
-  },
+addScore: (quizTaker, quizName, score) => {
+    return pool.query(`insert into imagequiz.score (quiz_id, customer_id, score, date)
+    values ($1, $2, $3, current_timestamp) returning id`, [quizName, quizTaker, score]);
+},
 
   getScores: (quizTaker, quizName) => {
-    let ret = []
-
-    for (i = 0; i < scores.length; i++ ) {
-      if (scores[i].quizTaker === quizTaker & scores[i].quizName === quizName) {
-        ret.push(scores[i]);
-      }
-    }
-
-    if (ret.length > 0) {
-      return {done: true, ret, message: "All scores of quiz found for quiz taker!"};
-    } else {
-      return {done: false, message: "No quiz with this name found!"}
-    }
+    return pool.query(`select score from imagequiz.customer
+    q join imagequiz.quiz qq on lower(q.name) = $1 and lower(qq.name) = $2
+    join imagequiz.score q2 on q2.customer_id = q.id and q2.quiz_id = qq.id`, [quizTaker.toLowerCase(), quizName.toLowerCase()])
   }
 }
 

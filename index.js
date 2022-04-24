@@ -91,32 +91,39 @@ app.post("/score", (request, response) => {
     let quizName = request.body.quizName;
     let score = request.body.score;
 
-    store.addScore(quizTaker, quizName, score).
-    then(x => {
-        console.log(x);
+    store.checkScore(quizTaker, quizName)
+    .then(x => {
+        if (x.done) {
+            store.addScore(x.result.rows[0].user_id, x.result.rows[0].quiz_id, score).
+            then(y => {
+                if (y.rows.length > 0){
+                    response.status(201).json({done: true, message: "Score added successfully!"});
+                }
+            })
+        } else {
+            response.status(404).json({done: false, result: undefined, message: x.message});
+        }
     })
     .catch(e => {
       console.log(e);
       response.status(500).json({done: false, message: "Something went wrong."});
     });
-
-    response.status(200).json(
-      {done: true, message: "Score added successfully!"});
 });
 
 app.get("/scores/:quiztaker/:quizname", (request, response) => {
     let quizTaker = request.params.quiztaker;
     let quizName = request.params.quizname;
 
-    let result = store.getScores(quizTaker, quizName);
-
-    if (result.done) {
-      response.status(200).json(
-        {done: true, result: result.ret, message: result.message});
-    } else {
-      response.status(404).json(
-        {done: false, result: undefined, message: result.message});
-    }
+    result = store.getScores(quizTaker, quizName)
+    .then(x => {
+      if (x.rows.length > 0) {
+        response.status(200).json(
+          {done: true, result: x.rows , message: x.message});
+      } else {
+        response.status(404).json(
+          {done: false, result: undefined, message: x.message});
+      }
+    })
 });
 
 app.listen(port, () => {
