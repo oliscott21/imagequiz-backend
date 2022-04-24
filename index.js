@@ -114,16 +114,19 @@ app.get("/scores/:quiztaker/:quizname", (request, response) => {
     let quizTaker = request.params.quiztaker;
     let quizName = request.params.quizname;
 
-    result = store.getScores(quizTaker, quizName)
+    store.getScores(quizTaker, quizName)
     .then(x => {
       if (x.rows.length > 0) {
-        response.status(200).json(
-          {done: true, result: x.rows , message: x.message});
+        response.status(200).json({done: true, result: x.rows , message: "All quizes found of this name for user!"});
       } else {
         response.status(404).json(
-          {done: false, result: undefined, message: x.message});
+          {done: false, result: undefined, message: "No quizes of this name found for the user"});
       }
     })
+    .catch(e => {
+      console.log(e);
+      response.status(500).json({done: false, message: "Something went wrong."});
+    });
 });
 
 app.listen(port, () => {

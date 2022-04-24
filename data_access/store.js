@@ -79,13 +79,6 @@ checkScore: (quizTaker, quizName) => {
   })
 },
 
-/*
-id bigserial primary key,
-quiz_id int references imagequiz.quiz(id),
-customer_id int references imagequiz.customer(id),
-score float8 not null,
-date timestamp not null
-*/
 addScore: (quizTaker, quizName, score) => {
     return pool.query(`insert into imagequiz.score (quiz_id, customer_id, score, date)
     values ($1, $2, $3, current_timestamp) returning id`, [quizName, quizTaker, score]);
