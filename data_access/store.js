@@ -84,10 +84,10 @@ addScore: (quizTaker, quizName, score) => {
     values ($1, $2, $3, current_timestamp) returning id`, [quizName, quizTaker, score]);
 },
 
-  getScores: (quizTaker, quizName) => {
+getScores: (quizTaker, quizName) => {
     return pool.query(`select score from imagequiz.customer
     q join imagequiz.quiz qq on lower(q.name) = $1 and lower(qq.name) = $2
-    join imagequiz.score q2 on q2.customer_id = q.id and q2.quiz_id = qq.id`, [quizTaker.toLowerCase(), quizName.toLowerCase()])
+    join imagequiz.score q2 on q2.customer_id = q.id and q2.quiz_id = qq.id`, [quizTaker.toLowerCase(), quizName.toLowerCase()]);
   }
 }
 
