@@ -70,13 +70,6 @@ let store = {
 checkScore: (quizTaker, quizName) => {
   return pool.query(`select q.id as user_id, qq.id as quiz_id from imagequiz.customer
   q join imagequiz.quiz qq on lower(q.email) = $1 and lower(qq.name) = $2`, [quizTaker.toLowerCase(), quizName.toLowerCase()])
-  .then(x => {
-      if (x.rows.length > 0) {
-          return {done: true, result: x, message:"Score successfully added!"}
-      } else {
-          return {done: false, result:undefined, message: "Quiz or Taker do not exist!"};
-      }
-  })
 },
 
 addScore: (quizTaker, quizName, score) => {

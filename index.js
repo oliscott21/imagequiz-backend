@@ -93,20 +93,16 @@ app.post("/score", (request, response) => {
 
     store.checkScore(quizTaker, quizName)
     .then(x => {
-        if (x.done) {
-            store.addScore(x.result.rows[0].user_id, x.result.rows[0].quiz_id, score).
-            then(y => {
-                if (y.rows.length > 0){
-                    response.status(201).json({done: true, message: "Score added successfully!"});
-                }
-            })
-        } else {
-            response.status(404).json({done: true, result: undefined, message: x.message});
-        }
+        store.addScore(x.rows[0].user_id, x.rows[0].quiz_id, score).
+        then(y => {
+            if (y.rows.length > 0){
+                response.status(201).json({done: true, message: "Score added successfully!"});
+            }
+        })
     })
     .catch(e => {
       console.log(e);
-      response.status(500).json({done: true, message: "Something went wrong."});
+      response.status(500).json({done: false, message: "Something went wrong."});
     });
 });
 
