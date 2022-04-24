@@ -116,7 +116,7 @@ app.get("/scores/:quiztaker/:quizname", (request, response) => {
 
     store.getScores(quizTaker, quizName)
     .then(x => {
-      if (x.rows.length > 0) {
+      if (x.rows.length > 0 && x.rows) {
         response.status(200).json({done: true, result: x.rows , message: "All quizes found of this name for user!"});
       } else {
         response.status(404).json(
