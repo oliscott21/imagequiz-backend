@@ -22,6 +22,7 @@ app.post("/register", (request, response) => {
 
     store.addCustomer(name, email, password)
     .then(x => {
+        console.log(x);
         if (x.rows.length > 0) {
               response.status(201).json({done: true, result: "Customer added successfully!"});
           } else {
