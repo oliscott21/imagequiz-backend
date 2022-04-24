@@ -16,7 +16,8 @@ let store = {
 
   addCustomer: (name, email, password) => {
     const hash = bcrypt.hashSync(password, 10);
-    return pool.query(`insert into imagequiz.customer (name, email, password) values ($1, $2, $3)`, [name, email, hash]);
+    return pool.query(`insert into imagequiz.customer (name, email, password) values ($1, $2, $3)
+    on conflict (email) do nothing;`, [name, email, hash]);
   },
 
   login: (email, password) => {
@@ -66,11 +67,28 @@ let store = {
     });
   },
 
-  addScore: (quizTaker, quizName, score) => {
-    pool.query();
+/*
+id bigserial primary key,
+quiz_id int references imagequiz.quiz(id),
+customer_id int references imagequiz.customer(id),
+score float8 not null,
+date timestamp not null
+*/
 
+  addScore: (quizTaker, quizName, score) => {
+    let temp = pool.query(`select q.id from imagequiz.customer q join qq.id
+    from imagequiz.quiz where lower(q.name) = $1 and lower(qq.name) = $2`, [quizTaker.toLowerCase(), quizName.toLowerCase()])
+    .then(x => {
+        console.log(x.rows);
+    });
+
+    //let temp2 = pool.query(`select q.id from imagequiz.quiz q
+      //where name = quizName`)
+    return temp;
+/*
     scores.push(
       {quizTaker: quizTaker, quizName: quizName, score: score});
+      */
   },
 
   getScores: (quizTaker, quizName) => {

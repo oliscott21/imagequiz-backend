@@ -21,7 +21,13 @@ app.post("/register", (request, response) => {
     let password = request.body.password;
 
     store.addCustomer(name, email, password)
-    .then(x => response.status(200).json({done: true, message: "Customer was added successfully!"})
+    .then(x => {
+        if (x.rowCount > 0) {
+              response.status(201).json({done: true, result: "Customer added successfully!"});
+          } else {
+              response.status(409).json({done: false, result: "Customer already exists!"});
+          }
+      }
     )
     .catch(e => {
       console.log(e);
@@ -85,7 +91,14 @@ app.post("/score", (request, response) => {
     let quizName = request.body.quizName;
     let score = request.body.score;
 
-    store.addScore(quizTaker, quizName, score);
+    store.addScore(quizTaker, quizName, score).
+    then(x => {
+        console.log(x);
+    })
+    .catch(e => {
+      console.log(e);
+      response.status(500).json({done: false, message: "Something went wrong."});
+    });
 
     response.status(200).json(
       {done: true, message: "Score added successfully!"});
