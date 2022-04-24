@@ -21,7 +21,14 @@ app.post("/register", (request, response) => {
     let password = request.body.password;
 
     store.addCustomer(name, email, password)
-    .then(x => response.status(200).json({ done: true, message: 'The customer was added successfully!' }))
+    .then(x => {
+        if (x.rows.length > 0) {
+              response.status(201).json({done: true, result: "Customer added successfully!"});
+          } else {
+              response.status(403).json({done: false, result: "Customer already exists!"});
+          }
+      }
+    )
     .catch(e => {
       console.log(e);
       response.status(500).json({done: false, message: "Something went wrong."});
@@ -84,18 +91,18 @@ app.post("/score", (request, response) => {
     let quizName = request.body.quizName;
     let score = request.body.score;
 
-    store.checkScore(quizTaker)
+    store.checkScore(quizTaker, quizName)
     .then(x => {
-        store.addScore(x.rows[0].user_id, quizName, score)
-        .then(y => {
-            if (y.rows.length > 0) {
-                response.status(201).json({done: true, message: "Score added successfully!"});
-            }
-        })
-        .catch(e => {
-          console.log(e);
-          response.status(500).json({done: false, message: "Something went wrong."});
-        });
+        if (x.done) {
+            store.addScore(x.result.rows[0].user_id, x.result.rows[0].quiz_id, score).
+            then(y => {
+                if (y.rows.length > 0){
+                    response.status(201).json({done: true, message: "Score added successfully!"});
+                }
+            })
+        } else {
+            response.status(404).json({done: false, result: undefined, message: x.message});
+        }
     })
     .catch(e => {
       console.log(e);

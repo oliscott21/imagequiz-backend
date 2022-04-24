@@ -15,9 +15,10 @@ const pool = new Pool(conection);
 let store = {
 
   addCustomer: (name, email, password) => {
-        const hash = bcrypt.hashSync(password, 10);
-        return pool.query('insert into imagequiz.customer (name, email, password) values ($1 , $2, $3)', [name, email, hash]);
-    },
+    const hash = bcrypt.hashSync(password, 10);
+    return pool.query(`insert into imagequiz.customer (name, email, password) values ($1, $2, $3)
+    on conflict (email) do nothing returning id;`, [name, email, hash]);
+  },
 
   login: (email, password) => {
     return pool.query("select name, email, password from imagequiz.customer where email = $1", [email])
@@ -66,8 +67,17 @@ let store = {
     });
   },
 
-checkScore: (quizTaker) => {
-  return pool.query(`select q.id as user_id from imagequiz.customer q where lower(q.email) = $1`, [quizTaker.toLowerCase()]);
+checkScore: (quizTaker, quizName) => {
+  return pool.query(`select q.id as user_id, qq.id as quiz_id from imagequiz.customer
+  q join imagequiz.quiz qq on lower(q.email) = $1 and lower(qq.name) = $2`, [quizTaker.toLowerCase(), quizName.toLowerCase()])
+  .then(x => {
+      console.log(x);
+      if (x.rows.length > 0) {
+          return {done: true, result: x, message:"Score successfully added!"}
+      } else {
+          return {done: false, result:undefined, message: "Quiz or Taker do not exist!"};
+      }
+  })
 },
 
 addScore: (quizTaker, quizName, score) => {
