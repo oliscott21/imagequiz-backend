@@ -22,10 +22,10 @@ app.post("/register", (request, response) => {
 
     store.addCustomer(name, email, password)
     .then(x => {
-        if (x.rowCount > 0) {
+        if (x.rows.length > 0) {
               response.status(201).json({done: true, result: "Customer added successfully!"});
           } else {
-              response.status(409).json({done: false, result: "Customer already exists!"});
+              response.status(403).json({done: false, result: "Customer already exists!"});
           }
       }
     )

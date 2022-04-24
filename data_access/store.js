@@ -17,7 +17,7 @@ let store = {
   addCustomer: (name, email, password) => {
     const hash = bcrypt.hashSync(password, 10);
     return pool.query(`insert into imagequiz.customer (name, email, password) values ($1, $2, $3)
-    on conflict (email) do nothing;`, [name, email, hash]);
+    on conflict (email) do nothing returning id;`, [name, email, hash]);
   },
 
   login: (email, password) => {
