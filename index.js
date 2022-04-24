@@ -93,13 +93,16 @@ app.post("/score", (request, response) => {
 
     store.checkScore(quizTaker)
     .then(x => {
-        console.log(1);
         store.addScore(x.rows[0].user_id, quizName, score)
         .then(y => {
-            if (y.rows.length > 0){
+            if (y.rows.length > 0) {
                 response.status(201).json({done: true, message: "Score added successfully!"});
             }
         })
+        .catch(e => {
+          console.log(e);
+          response.status(500).json({done: false, message: "Something went wrong."});
+        });
     })
     .catch(e => {
       console.log(e);
