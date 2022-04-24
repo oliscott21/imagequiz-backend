@@ -12,6 +12,11 @@ app.use(cors());
 
 //methods
 app.get("/", (request, response) => {
+
+    store.temp().
+    then(x => {
+        console.log(x);
+    })
     response.status(200).json({done: true, message: "Fine"});
 });
 

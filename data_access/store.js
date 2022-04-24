@@ -14,6 +14,11 @@ const pool = new Pool(conection);
 
 let store = {
 
+  temp: () => {
+
+    return pool.query(`select * from imagequiz.customer`);
+  },
+
   addCustomer: (name, email, password) => {
     const hash = bcrypt.hashSync(password, 10);
     return pool.query(`insert into imagequiz.customer (name, email, password) values ($1, $2, $3)
