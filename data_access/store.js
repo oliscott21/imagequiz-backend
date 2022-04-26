@@ -80,6 +80,7 @@ let store = {
   },
 
 checkScore: (quizTaker, quizName) => {
+  console.log(quizTaker);
   return pool.query(`select q.id as user_id, qq.id as quiz_id from imagequiz.customer
   q join imagequiz.quiz qq on lower(q.email) = $1 and lower(qq.name) = $2`, [quizTaker.toLowerCase(), quizName.toLowerCase()])
   .then(x => {
@@ -92,15 +93,39 @@ checkScore: (quizTaker, quizName) => {
   })
 },
 
+checkCustomer: (quizTaker) => {
+    return pool.query(`select q.id as user_id from imagequiz.customer q where lower(q.email) = $1`, [quizTaker.toLowerCase()])
+    .then(x => {
+        if (x.rows.length > 0) {
+            return {done:true, result: x.rows[0].user_id}
+        } else {
+            return {done:false, message: "No customer of with this email exists"}
+        }
+    })
+},
+
+checkQuiz: (quizName) => {
+    return pool.query(`select q.id as user_id from imagequiz.customer q where lower(q.email) = $1`, [quizName.toLowerCase()])
+    .then(x => {
+        if (x.rows.length > 0) {
+            return {done:true, result: x.rows[0].user_id}
+        } else {
+            return {done:false, message: "No quiz of this name exists"}
+        }
+    })
+},
+
+
 addScore: (quizTaker, quizName, score) => {
     return pool.query(`insert into imagequiz.score (quiz_id, customer_id, score, date)
     values ($1, $2, $3, current_timestamp) returning id`, [quizName, quizTaker, score]);
 },
 
 getScores: (quizTaker, quizName) => {
-    return pool.query(`select score from imagequiz.customer
-    q join imagequiz.quiz qq on lower(q.name) = $1 and lower(qq.name) = $2
-    join imagequiz.score q2 on q2.customer_id = q.id and q2.quiz_id = qq.id`, [quizTaker.toLowerCase(), quizName.toLowerCase()]);
+    console.log(quizTaker);
+    console.log(quizName);
+    return pool.query(`select score from imagequiz.score s where
+      s.customer_id = $1 and s.quiz_id = $2`, [quizTaker, quizName]);
   }
 }
 

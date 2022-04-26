@@ -137,11 +137,41 @@ app.get("/scores/:quiztaker/:quizname", (request, response) => {
     let quizTaker = request.params.quiztaker;
     let quizName = request.params.quizname;
 
+    store.checkCustomer(quizTaker)
+    .then(x => {
+        if (x.done) {
+            store.checkQuiz(quizTaker).
+            then(y => {
+                if (y.done) {
+                  store.getScores(x.result, y.result)
+                  .then(z => {
+                      if (z.rows.length > 0) {
+                        response.status(201).json({done: true, result: z.rows , message: "All quizes found of this name for user!"});
+                      } else {
+                        response.status(404).json(
+                          {done: false, result: undefined, message: "No quizes of this name found for the user"});
+                      }
+                  })
+                  .catch(e => {
+                      console.log(e);
+                      response.status(500).json({done: false, message: "Something went wrong."});
+                  });
+                } else {
+                    response.status(404).json({done:false, result: [], message: y.message})
+                }
+            })
+            .catch(e => {
+                console.log(e);
+                response.status(500).json({done: false, message: "Something went wrong."});
+            });
+        } else {
+            response.status(404).json({done:false, result: [], message: x.message})
+        }
+    /*
     store.checkScore(quizTaker, quizName)
     .then(x => {
-      response.status(201).json({done: true, result: x.result.rows , message: "All quizes found of this name for user!"});
+      response.status(201).json({done: true, result: x , message: x.message});
 
-        /*
         store.getScores(quizTaker, quizName)
         .then(x => {
           if (x.rows.length > 0) {
