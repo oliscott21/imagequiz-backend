@@ -6,10 +6,49 @@ const app = express();
 const cors = require("cors");
 const port = process.env.PORT || 4002;
 
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const session = require('express-session');
+const SQLiteStore = require('connect-sqlite3')(session);
 
 //middlewares
 app.use(express.json());
 app.use(cors());
+
+passport.use(new LocalStrategy({ usernameField: "email"}, function verify(username, password, cb) {
+    store.login(username, password)
+    .then(x => {
+        if (x.valid) {
+            return cb(null, x.user);
+        } else {
+            return cb(null, false, {message: x.message})
+        }
+    })
+    .catch(e => {
+        console.log(e);
+        return cb("Something went wrong");
+    });
+}));
+
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    store: new SQLiteStore({ db: 'sessions.db', dir: './sessions' })
+}));
+app.use(passport.authenticate('session'));
+
+passport.serializeUser(function(user, cb) {
+    process.nextTick(function() {
+        cb(null, { id: user.id, username: user.username });
+    });
+});
+
+passport.deserializeUser(function(user, cb) {
+    process.nextTick(function() {
+        return cb(null, user);
+    });
+});
 
 //methods
 app.get("/", (request, response) => {
@@ -37,36 +76,35 @@ app.post("/register", (request, response) => {
     });
 });
 
-app.post("/login", (request, response) => {
-    let email = request.body.email;
-    let password = request.body.password;
+app.post("/login", passport.authenticate("local", {
+    successRedirect: '/login/success',
+    failureRedirect: '/login/failed'
+}));
 
-    store.login(email, password)
-    .then(x => {
-      if (x.valid) {
-        response.status(200).json(
-          {done: true, message: "Customer logged in successfully!"});
-      } else {
-        response.status(401).json(
-          {done: false, message: x.message});
-      }
-    })
-    .catch(e => {
-      console.log(e);
-      response.status(500).json({done: false, message: "Something went wrong."});
-    });
+//done
+app.get("/login/success", (request, response) => {
+    response.status(200).json({done: true, result: "Successfully logged in!"});
+});
+
+//done
+app.get("/login/failed", (request, response) => {
+    response.status(401).json({done: false, result: "Credentials invalid!"});
 });
 
 app.get("/flowers", (request, response) => {
-    store.getFlowers()
-    .then(x => {
-      response.status(200).json(
-        {done: true, result: x, message: "Got all flowers"});
-    })
-    .catch(e => {
-      console.log(e);
-      response.status(500).json({done: false, message: "Something went wrong."});
-    });
+    if (!request.isAuthenticated()) {
+        response.status(401).json({done: false, message: "Please log in first!"});
+    } else {
+        store.getFlowers()
+        .then(x => {
+          response.status(200).json(
+            {done: true, result: x, message: "Got all flowers"});
+        })
+        .catch(e => {
+          console.log(e);
+          response.status(500).json({done: false, message: "Something went wrong."});
+        });
+    }
 });
 
 app.get("/quiz/:name", (request, response) => {
