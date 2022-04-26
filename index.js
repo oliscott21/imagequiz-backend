@@ -66,7 +66,15 @@ passport.deserializeUser(function(user, cb) {
 
 //methods
 app.get("/", (request, response) => {
-    response.status(200).json({done: true, message: "Welcome to imagequiz-backend API!"});
+    store.check()
+    .then ( x => {
+        console.log(x);
+        response.status(200).json({done: true, result:x, message: "Welcome to imagequiz-backend API!"});
+    })
+    .catch(e => {
+      console.log(e);
+      response.status(500).json({done: false, message: "Something went wrong."});
+    });
 });
 
 
