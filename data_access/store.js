@@ -15,7 +15,6 @@ const pool = new Pool(conection);
 let store = {
 
   temp: () => {
-
     return pool.query(`select * from imagequiz.customer`);
   },
 

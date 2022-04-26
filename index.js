@@ -15,7 +15,7 @@ app.use(cors());
 app.get("/", (request, response) => {
 
     store.temp()
-    then(x => {
+    .then(x => {
         response.status(200).json({done: true, id: x.rows, message: "Fine"});
     })
 });
