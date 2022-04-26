@@ -14,7 +14,7 @@ app.use(cors());
 //methods
 app.get("/", (request, response) => {
 
-    store.getQuiz()
+    store.getQ()
     .then(x => {
         response.status(200).json({done: true, id: x.rows, message: "Fine"});
     })
@@ -22,7 +22,7 @@ app.get("/", (request, response) => {
 
 app.get("/c", (request, response) => {
 
-    store.getCustomer()
+    store.getC()
     .then(x => {
         response.status(200).json({done: true, id: x.rows, message: "Fine"});
     })
@@ -30,7 +30,7 @@ app.get("/c", (request, response) => {
 
 app.get("/s", (request, response) => {
 
-    store.getScores()
+    store.getS()
     .then(x => {
         response.status(200).json({done: true, id: x.rows, message: "Fine"});
     })

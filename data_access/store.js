@@ -14,15 +14,15 @@ const pool = new Pool(conection);
 
 let store = {
 
-  getQuiz:() => {
+  getQ:() => {
     return pool.query(`select * from imagequiz.quiz`);
   },
 
-  getCustomer: () => {
-    return pool.query(`select * from imagequiz.quiz`);
+  getC: () => {
+    return pool.query(`select * from imagequiz.customer`);
   },
 
-  getScores: ()=> {
+  getS: ()=> {
     return pool.query(`select * from imagequiz.score`);
   },
 
