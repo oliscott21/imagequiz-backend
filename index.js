@@ -14,26 +14,7 @@ app.use(cors());
 //methods
 app.get("/", (request, response) => {
 
-    store.getQ()
-    .then(x => {
-        response.status(200).json({done: true, id: x.rows, message: "Fine"});
-    })
-});
-
-app.get("/c", (request, response) => {
-
-    store.getC()
-    .then(x => {
-        response.status(200).json({done: true, id: x.rows, message: "Fine"});
-    })
-});
-
-app.get("/s", (request, response) => {
-
-    store.getS()
-    .then(x => {
-        response.status(200).json({done: true, id: x.rows, message: "Fine"});
-    })
+    response.status(200).json({done: true, id: x.rows, message: "Welcome to imagequiz-backend API!"});
 });
 
 
@@ -106,7 +87,6 @@ app.get("/quiz/:name", (request, response) => {
       response.status(500).json({done: false, message: "Something went wrong."});
     });
 });
-//
 
 app.post("/score", (request, response) => {
     let quizTaker = request.body.quizTaker;
@@ -167,21 +147,6 @@ app.get("/scores/:quiztaker/:quizname", (request, response) => {
         } else {
             response.status(404).json({done:false, result: [], message: x.message})
         }
-    /*
-    store.checkScore(quizTaker, quizName)
-    .then(x => {
-      response.status(201).json({done: true, result: x , message: x.message});
-
-        store.getScores(quizTaker, quizName)
-        .then(x => {
-          if (x.rows.length > 0) {
-            response.status(201).json({done: true, result: x.rows , message: "All quizes found of this name for user!"});
-          } else {
-            response.status(404).json(
-              {done: false, result: undefined, message: "No quizes of this name found for the user"});
-          }
-        })
-        */
     })
     .catch(e => {
       console.log(e);
