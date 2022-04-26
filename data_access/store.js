@@ -13,7 +13,7 @@ const conection = {
 const pool = new Pool(conection);
 
 let store = {
-  
+
   addCustomer: (name, email, password) => {
     const hash = bcrypt.hashSync(password, 10);
     return pool.query(`insert into imagequiz.customer (name, email, password) values ($1, $2, $3)
@@ -39,10 +39,13 @@ let store = {
   getFlowers: () => {
     return pool.query(`select * from imagequiz.flowers`)
     .then(x => {
+      return x;
+      /*
       let quiz = x.rows.map(y => {
         return {name: y.name, picture: y.picture}
       })
       return quiz;
+      */
     });
   },
 
