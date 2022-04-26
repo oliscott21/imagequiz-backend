@@ -6,6 +6,7 @@ const app = express();
 const cors = require("cors");
 const port = process.env.PORT || 4002;
 
+
 //middlewares
 app.use(express.json());
 app.use(cors());
@@ -13,12 +14,12 @@ app.use(cors());
 //methods
 app.get("/", (request, response) => {
 
-    store.temp().
+    store.temp()
     then(x => {
-        console.log(x);
+        response.status(200).json({done: true, id: x.rows, message: "Fine"});
     })
-    response.status(200).json({done: true, message: "Fine"});
 });
+
 
 app.post("/register", (request, response) => {
     let name = request.body.name;
@@ -27,7 +28,6 @@ app.post("/register", (request, response) => {
 
     store.addCustomer(name, email, password)
     .then(x => {
-        console.log(x);
         if (x.rows.length > 0) {
               response.status(201).json({done: true, result: "Customer added successfully!"});
           } else {
