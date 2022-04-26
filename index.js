@@ -13,8 +13,9 @@ const SQLiteStore = require('connect-sqlite3')(session);
 
 //middlewares
 app.use(express.json());
+
 app.use(cors({
-  origin: "https://oliscott21.github.io",
+  origin: "http://localhos:3000",
   credentials: true
 }));
 
@@ -95,19 +96,14 @@ app.get("/login/failed", (request, response) => {
 });
 
 app.get("/flowers", (request, response) => {
-    if (!request.isAuthenticated()) {
-        response.status(401).json({done: false, message: "Please log in first!"});
-    } else {
-        store.getFlowers()
-        .then(x => {
-          response.status(200).json(
-            {done: true, result: x, message: "Got all flowers"});
-        })
-        .catch(e => {
-          console.log(e);
-          response.status(500).json({done: false, message: "Something went wrong."});
-        });
-    }
+    store.getFlowers()
+    .then(x => {
+        response.status(200).json({done: true, result: x, message: "Got all flowers"});
+    })
+    .catch(e => {
+        console.log(e);
+        response.status(500).json({done: false, message: "Something went wrong."});
+    });
 });
 
 app.get("/quiz/:name", (request, response) => {
