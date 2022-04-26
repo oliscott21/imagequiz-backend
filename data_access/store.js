@@ -15,7 +15,7 @@ const pool = new Pool(conection);
 let store = {
 
   temp: () => {
-    return pool.query(`select * from imagequiz.score`);
+    return pool.query(`select * from imagequiz.quiz`);
   },
 
   addCustomer: (name, email, password) => {
