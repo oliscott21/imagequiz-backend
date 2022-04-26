@@ -16,7 +16,7 @@ let store = {
 
   check: () => {
       return pool.query(`select * from imagequiz.flowers`)
-  }
+  },
 
   addCustomer: (name, email, password) => {
     const hash = bcrypt.hashSync(password, 10);
