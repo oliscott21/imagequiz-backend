@@ -105,10 +105,10 @@ checkCustomer: (quizTaker) => {
 },
 
 checkQuiz: (quizName) => {
-    return pool.query(`select q.id as user_id from imagequiz.quiz q where lower(q.name) = $1`, [quizName.toLowerCase()])
+    return pool.query(`select q.id as quiz_id from imagequiz.quiz q where lower(q.name) = $1`, [quizName.toLowerCase()])
     .then(x => {
         if (x.rows.length > 0) {
-            return {done:true, result: x.rows[0].user_id}
+            return {done:true, result: x.rows[0].quiz_id}
         } else {
             return {done:false, message: "No quiz of this name exists"}
         }

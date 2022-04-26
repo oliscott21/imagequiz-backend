@@ -140,7 +140,7 @@ app.get("/scores/:quiztaker/:quizname", (request, response) => {
     store.checkCustomer(quizTaker)
     .then(x => {
         if (x.done) {
-            store.checkQuiz(quizTaker).
+            store.checkQuiz(quizName).
             then(y => {
                 if (y.done) {
                   store.getScores(x.result, y.result)
