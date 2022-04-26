@@ -105,7 +105,7 @@ checkCustomer: (quizTaker) => {
 },
 
 checkQuiz: (quizName) => {
-    return pool.query(`select q.id as user_id from imagequiz.customer q where lower(q.email) = $1`, [quizName.toLowerCase()])
+    return pool.query(`select q.id as user_id from imagequiz.quiz q where lower(q.name) = $1`, [quizName.toLowerCase()])
     .then(x => {
         if (x.rows.length > 0) {
             return {done:true, result: x.rows[0].user_id}
@@ -114,7 +114,6 @@ checkQuiz: (quizName) => {
         }
     })
 },
-
 
 addScore: (quizTaker, quizName, score) => {
     return pool.query(`insert into imagequiz.score (quiz_id, customer_id, score, date)
