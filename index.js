@@ -13,7 +13,10 @@ const SQLiteStore = require('connect-sqlite3')(session);
 
 //middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: "https://oliscott21-imagequiz-api.herokuapp.com",
+  credentials: true
+}));
 
 passport.use(new LocalStrategy({ usernameField: "email"}, function verify(username, password, cb) {
     store.login(username, password)
@@ -108,21 +111,25 @@ app.get("/flowers", (request, response) => {
 });
 
 app.get("/quiz/:name", (request, response) => {
-    let name = request.params.name;
-    store.getQuiz(name)
-    .then(x => {
-        if (x) {
-          response.status(200).json(
-            {done: true, result: x, message: "A quiz with this name was found"});
-        } else {
-          response.status(404).json(
-            {done: false, result: undefined, message: "No quiz with this name found!"});
-        }
-    })
-    .catch(e => {
-      console.log(e);
-      response.status(500).json({done: false, message: "Something went wrong."});
-    });
+    if (!request.isAuthenticated()) {
+        response.status(401).json({done: false, message: "Please log in first!"});
+    } else {
+        let name = request.params.name;
+        store.getQuiz(name)
+        .then(x => {
+            if (x) {
+              response.status(200).json(
+                {done: true, result: x, message: "A quiz with this name was found"});
+            } else {
+              response.status(404).json(
+                {done: false, result: undefined, message: "No quiz with this name found!"});
+            }
+        })
+        .catch(e => {
+          console.log(e);
+          response.status(500).json({done: false, message: "Something went wrong."});
+        });
+    }
 });
 
 app.post("/score", (request, response) => {
