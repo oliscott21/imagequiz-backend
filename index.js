@@ -19,7 +19,7 @@ app.use(cors({
   credentials: true
 }));
 
-application.use((request, response, next) => {
+app.use((request, response, next) => {
     console.log(`request url: ${request.url}`);
     console.log(`request method: ${request.method}`);
     //only for development. Remove this line when you deploy your final version.
