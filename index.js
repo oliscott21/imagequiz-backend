@@ -137,14 +137,21 @@ app.get("/scores/:quiztaker/:quizname", (request, response) => {
     let quizTaker = request.params.quiztaker;
     let quizName = request.params.quizname;
 
-    store.getScores(quizTaker, quizName)
+    store.checkScore(quizTaker, quizName)
     .then(x => {
-      if (x.rows.length > 0) {
-        response.status(201).json({done: true, result: x.rows , message: "All quizes found of this name for user!"});
-      } else {
-        response.status(404).json(
-          {done: false, result: [], message: "No quizes of this name found for the user"});
-      }
+      response.status(201).json({done: true, result: x.rows , message: "All quizes found of this name for user!"});
+    
+        /*
+        store.getScores(quizTaker, quizName)
+        .then(x => {
+          if (x.rows.length > 0) {
+            response.status(201).json({done: true, result: x.rows , message: "All quizes found of this name for user!"});
+          } else {
+            response.status(404).json(
+              {done: false, result: undefined, message: "No quizes of this name found for the user"});
+          }
+        })
+        */
     })
     .catch(e => {
       console.log(e);
