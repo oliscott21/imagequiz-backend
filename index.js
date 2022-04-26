@@ -13,8 +13,7 @@ app.use(cors());
 
 //methods
 app.get("/", (request, response) => {
-
-    response.status(200).json({done: true, id: x.rows, message: "Welcome to imagequiz-backend API!"});
+    response.status(200).json({done: true, message: "Welcome to imagequiz-backend API!"});
 });
 
 
