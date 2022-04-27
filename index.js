@@ -30,7 +30,6 @@ app.use((request, response, next) => {
 passport.use(new LocalStrategy({ usernameField: "email"}, function verify(username, password, cb) {
     store.login(username, password)
     .then(x => {
-        console.log(x);
         if (x.valid) {
             return cb(null, x.user);
         } else {
@@ -126,7 +125,7 @@ app.get("/flowers", (request, response) => {
 
 app.get("/quiz/:name", (request, response) => {
     if (!request.isAuthenticated()) {
-        response.status(401).json({done: false, message: "Please log in first!"});
+        response.status(401).json({done: false, temp:"true" message: "Please log in first!"});
     } else {
         let name = request.params.name;
         store.getQuiz(name)
