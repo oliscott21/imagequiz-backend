@@ -104,7 +104,7 @@ app.post("/login", passport.authenticate("local", {
 
 //done
 app.get("/login/success", (request, response) => {
-    response.status(200).json({done: true, result: "Successfully logged in!"});
+    response.status(200).json({done: true, temp: request.user, result: "Successfully logged in!"});
 });
 
 //done
@@ -126,7 +126,7 @@ app.get("/flowers", (request, response) => {
 app.get("/quiz/:name", (request, response) => {
     console.log(request.user);
     if (!request.isAuthenticated()) {
-        response.status(401).json({done: false, message: "Please log in first!"});
+        response.status(401).json({done: false, temp: request.user, message: "Please log in first!"});
     } else {
         let name = request.params.name;
         store.getQuiz(name)
