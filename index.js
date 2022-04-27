@@ -64,6 +64,7 @@ passport.deserializeUser(function(user, cb) {
 
 //methods
 app.get("/", (request, response) => {
+    console.log(request.user);
     store.check()
     .then ( x => {
         console.log(x);
@@ -123,6 +124,7 @@ app.get("/flowers", (request, response) => {
 });
 
 app.get("/quiz/:name", (request, response) => {
+    console.log(request.user);
     if (!request.isAuthenticated()) {
         response.status(401).json({done: false, message: "Please log in first!"});
     } else {
