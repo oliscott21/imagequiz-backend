@@ -64,11 +64,12 @@ passport.deserializeUser(function(user, cb) {
 
 //methods
 app.get("/", (request, response) => {
-    console.log(request.user);
+    console.log(request);
+    console.log("temp");
     store.check()
     .then ( x => {
         console.log(x);
-        response.status(200).json({done: true, result:x, message: "Welcome to imagequiz-backend API!"});
+        response.status(200).json({done: true, result:x.rows, message: "Welcome to imagequiz-backend API!"});
     })
     .catch(e => {
       console.log(e);
@@ -125,22 +126,25 @@ app.get("/flowers", (request, response) => {
 
 app.get("/quiz/:name", (request, response) => {
     if (!request.isAuthenticated()) {
-        response.status(401).json({done: false, temp:"true", message: "Please log in first!"});
+        response.status(401).json({done: false, signedIn: false, message: "Please log in first!"});
     } else {
         let name = request.params.name;
+
+        console.log(name);
+
         store.getQuiz(name)
         .then(x => {
             if (x) {
               response.status(200).json(
-                {done: true, result: x, message: "A quiz with this name was found"});
+                {done: true, signedIn: true, result: x, message: "A quiz with this name was found"});
             } else {
               response.status(404).json(
-                {done: false, result: undefined, message: "No quiz with this name found!"});
+                {done: false, signedIn: true, result: undefined, message: "No quiz with this name found!"});
             }
         })
         .catch(e => {
           console.log(e);
-          response.status(500).json({done: false, message: "Something went wrong."});
+          response.status(500).json({done: false, signedIn: true, message: "Something went wrong."});
         });
     }
 });
