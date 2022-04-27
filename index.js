@@ -125,7 +125,7 @@ app.get("/flowers", (request, response) => {
 
 app.get("/quiz/:name", (request, response) => {
     if (!request.isAuthenticated()) {
-        response.status(401).json({done: false, temp:"true" message: "Please log in first!"});
+        response.status(401).json({done: false, temp:"true", message: "Please log in first!"});
     } else {
         let name = request.params.name;
         store.getQuiz(name)
