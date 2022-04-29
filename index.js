@@ -113,6 +113,11 @@ app.get("/login/failed", (request, response) => {
     response.status(401).json({done: false, result: "Credentials invalid!"});
 });
 
+app.post('/logout', function(request, response) {
+    request.logout();
+    response.json({done:true, message: "The customer signed out successfully!"});
+});
+
 app.get("/flowers", (request, response) => {
     store.getFlowers()
     .then(x => {
