@@ -15,7 +15,7 @@ const SQLiteStore = require('connect-sqlite3')(session);
 app.use(express.json());
 
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: "https://oliscott21.github.io/imagequiz/",
   credentials: true
 }));
 
@@ -106,7 +106,6 @@ app.post("/login", passport.authenticate("local", {
 
 //done
 app.get("/login/success", (request, response) => {
-    console.log(request);
     response.status(200).json({done: true, result: "Successfully logged in!"});
 });
 
