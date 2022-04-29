@@ -15,7 +15,7 @@ const SQLiteStore = require('connect-sqlite3')(session);
 app.use(express.json());
 
 app.use(cors({
-  origin: "https://oliscott21.github.io/imagequiz/",
+  origin: "https://oliscott21.github.io",
   credentials: true
 }));
 
