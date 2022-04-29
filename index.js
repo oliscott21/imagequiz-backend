@@ -100,12 +100,17 @@ app.post("/register", (request, response) => {
 });
 
 app.post("/login", passport.authenticate("local", {
-    successRedirect: '/login/success',
-    failureRedirect: '/login/failed'
-}));
+    failureRedirect: '/login/failed'}), (req,res,next) => {
+        req.session.save((err => {
+          if (err) {
+            return next(err);
+          }
+        })
+    )});
 
 //done
 app.get("/login/success", (request, response) => {
+    request.session.save()
     response.status(200).json({done: true, result: "Successfully logged in!"});
 });
 
