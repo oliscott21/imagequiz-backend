@@ -44,8 +44,8 @@ passport.use(new LocalStrategy({ usernameField: "email"}, function verify(userna
 
 app.use(session({
     secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     store: new SQLiteStore({ db: 'sessions.db', dir: './sessions' })
 }));
 
@@ -100,13 +100,9 @@ app.post("/register", (request, response) => {
 });
 
 app.post("/login", passport.authenticate("local", {
-    failureRedirect: '/login/failed'}), (req,res,next) => {
-        req.session.save((err => {
-          if (err) {
-            return next(err);
-          }
-        })
-    )});
+    successRedirect: '/login/success',
+    failureRedirect: '/login/failed'
+}));
 
 //done
 app.get("/login/success", (request, response) => {
