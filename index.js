@@ -48,6 +48,8 @@ app.use(session({
     saveUninitialized: false,
     store: new SQLiteStore({ db: 'sessions.db', dir: './sessions' })
 }));
+
+app.use(passport.initialize());
 app.use(passport.authenticate('session'));
 
 passport.serializeUser(function(user, cb) {
@@ -64,8 +66,6 @@ passport.deserializeUser(function(user, cb) {
 
 //methods
 app.get("/", (request, response) => {
-    console.log(request);
-    console.log("temp");
     store.check()
     .then ( x => {
         console.log(x);
@@ -79,6 +79,7 @@ app.get("/", (request, response) => {
 
 
 app.post("/register", (request, response) => {
+    console.log(request);
     let name = request.body.name;
     let email = request.body.email;
     let password = request.body.password;
@@ -134,8 +135,6 @@ app.get("/quiz/:name", (request, response) => {
         response.status(401).json({done: false, signedIn: false, message: "Please log in first!"});
     } else {
         let name = request.params.name;
-
-        console.log(name);
 
         store.getQuiz(name)
         .then(x => {
