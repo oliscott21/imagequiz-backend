@@ -51,6 +51,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.authenticate('session'));
+app.use(passport.session());
 
 passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
