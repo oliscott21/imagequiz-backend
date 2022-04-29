@@ -42,17 +42,6 @@ passport.use(new LocalStrategy({ usernameField: "email"}, function verify(userna
     });
 }));
 
-app.use(session({
-    secret: 'keyboard cat',
-    resave: true,
-    saveUninitialized: true,
-    store: new SQLiteStore({ db: 'sessions.db', dir: './sessions' })
-}));
-
-app.use(passport.initialize());
-app.use(passport.authenticate('session'));
-app.use(passport.session());
-
 passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
         cb(null, { id: user.id, username: user.username });
@@ -64,6 +53,17 @@ passport.deserializeUser(function(user, cb) {
         return cb(null, user);
     });
 });
+
+app.use(session({
+    secret: 'keyboard cat',
+    resave: true,
+    saveUninitialized: true,
+    store: new SQLiteStore({ db: 'sessions.db', dir: './sessions' })
+}));
+
+app.use(passport.initialize());
+app.use(passport.authenticate('session'));
+app.use(passport.session());
 
 //methods
 app.get("/", (request, response) => {
@@ -80,7 +80,6 @@ app.get("/", (request, response) => {
 
 
 app.post("/register", (request, response) => {
-    console.log(request);
     let name = request.body.name;
     let email = request.body.email;
     let password = request.body.password;
@@ -107,7 +106,7 @@ app.post("/login", passport.authenticate("local", {
 
 //done
 app.get("/login/success", (request, response) => {
-    request.session.save()
+    console.log(request);
     response.status(200).json({done: true, result: "Successfully logged in!"});
 });
 
