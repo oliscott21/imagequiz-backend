@@ -15,7 +15,7 @@ const SQLiteStore = require('connect-sqlite3')(session);
 app.use(express.json());
 
 app.use(cors({
-  origin: "https://oliscott21.github.io",
+  origin: "https://oliscott21-imagequiz-backend.herokuapp.com",
   credentials: true
 }));
 
