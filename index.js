@@ -22,14 +22,14 @@ let frontEndUrl = "https://oliscott21.github.io/"
 app.use(express.json());
 
 app.use(cors({
-  origin: "*",
+  origin: "https://oliscott21.github.io",
   credentials: true
 }));
 
 app.use((request, response, next) => {
     console.log(`request url: ${request.url}`);
     console.log(`request method: ${request.method}`);
-    request.header('Access-Control-Allow-Origin', "https://oliscott21.github.io/");
+    request.header('Access-Control-Allow-Origin', "https://oliscott21.github.io");
     request.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     request.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     request.header('Access-Control-Allow-Credentials', 'true');
