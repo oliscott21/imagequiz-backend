@@ -7,7 +7,7 @@ const { flowers } = require('../temporarily-store/flowers');
 let create_db_structure_sql = fs.readFileSync('setup.sql').toString();
 
 const connectionString =
-    `postgres://${process.env.USERNAME}:${process.env.PASSWORD}@${process.env.HOST}:${process.env.DATABASEPORT}/${process.env.DATABASE}`;
+    `postgres://${process.env.US}:${process.env.PASSWORD}@${process.env.HOST}:${process.env.DATABASEPORT}/${process.env.DATABASE}`;
 
 console.log(connectionString);
 const connection = {
