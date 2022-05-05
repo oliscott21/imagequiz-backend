@@ -29,9 +29,9 @@ app.use(cors({
 app.use((request, response, next) => {
     console.log(`request url: ${request.url}`);
     console.log(`request method: ${request.method}`);
-    res.header('Access-Control-Allow-Origin', backendUrl);
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    request.header('Access-Control-Allow-Origin', backendUrl);
+    request.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    request.header('Access-Control-Allow-Headers', 'Content-Type');
 next();
 })
 
