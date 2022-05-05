@@ -45,8 +45,8 @@ passport.use(new LocalStrategy({ usernameField: "email"}, function verify(userna
 }));
 
 passport.use(new GoogleStrategy({
-    clientID:     GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: `${backendUrl}/auth/google/callback`,
     passReqToCallback   : true
   },
@@ -125,24 +125,24 @@ app.get("/login/failed", (request, response) => {
     response.status(401).json({done: false, result: "Credentials invalid!"});
 });
 
-application.get('/auth/google/callback',
+app.get('/auth/google/callback',
   passport.authenticate('google', {
     successRedirect: '/auth/google/success',
     failureRedirect: '/auth/google/failure'
   }));
 
-  application.get('/auth/google/success', (request, response) => {
+  app.get('/auth/google/success', (request, response) => {
     console.log('/auth/google/success');
     console.log(request.user);
     response.redirect(`${frontEndUrl}/#/google/${request.user.username}/${request.user.name}`);
 
   });
-  application.get('/auth/google/failure', (request, response) => {
+  app.get('/auth/google/failure', (request, response) => {
     console.log('/auth/google/failure');
     response.redirect(`${frontEndUrl}/#/google/failed`);
   });
 
-  application.get('/isloggedin', (request, response) => {
+  app.get('/isloggedin', (request, response) => {
     if(request.isAuthenticated()) {
       response.status(200).json({ done: true, result: true });
     } else {
