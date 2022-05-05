@@ -13,16 +13,13 @@ const GoogleStrategy = require("passport-google-oauth2").Strategy;
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
 let backendUrl = "https://oliscott21-imagequiz-api.herokuapp.com";
-let frontEndUrl = "https://oliscott21.github.io/"
-
-//frontEndUrl = "http://localhost:3000"
-//backendUrl = "http://localhost:4002"
+let frontEndUrl = "https://oliscott21.github.io";
 
 //middlewares
 app.use(express.json());
 
 app.use(cors({
-  origin: "https://oliscott21.github.io",
+  origin: frontEndUrl,
   credentials: true
 }));
 
@@ -147,7 +144,7 @@ app.get('/auth/google/callback',
   app.get('/auth/google/success', (request, response) => {
     console.log('/auth/google/success');
     console.log(request.user);
-    response.redirect(`${frontEndUrl}#/google/${request.user.username}/${request.user.name}`);
+    response.redirect(`${frontEndUrl}/#/google/${request.user.username}/${request.user.name}`);
 
   });
   app.get('/auth/google/failure', (request, response) => {
