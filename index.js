@@ -31,7 +31,8 @@ app.use((request, response, next) => {
     console.log(`request method: ${request.method}`);
     request.header('Access-Control-Allow-Origin', "https://oliscott21.github.io/");
     request.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    request.header('Access-Control-Allow-Headers', 'Content-Type');
+    request.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    request.header('Access-Control-Allow-Credentials', 'true');
     next();
 })
 
