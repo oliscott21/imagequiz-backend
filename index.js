@@ -29,7 +29,7 @@ app.use(cors({
 app.use((request, response, next) => {
     console.log(`request url: ${request.url}`);
     console.log(`request method: ${request.method}`);
-    request.header('Access-Control-Allow-Origin', backendUrl);
+    request.header('Access-Control-Allow-Origin', "*");
     request.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     request.header('Access-Control-Allow-Headers', 'Content-Type');
 next();
