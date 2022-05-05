@@ -125,6 +125,13 @@ app.get("/login/failed", (request, response) => {
     response.status(401).json({done: false, result: "Credentials invalid!"});
 });
 
+app.get('/auth/google',
+  passport.authenticate('google', {
+    scope:
+      ['email', 'profile']
+  }
+));
+
 app.get('/auth/google/callback',
   passport.authenticate('google', {
     successRedirect: '/auth/google/success',
