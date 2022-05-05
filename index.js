@@ -147,7 +147,7 @@ app.get('/auth/google/callback',
   app.get('/auth/google/success', (request, response) => {
     console.log('/auth/google/success');
     console.log(request.user);
-    response.redirect(`${frontEndUrl}/#/google/${request.user.username}/${request.user.name}`);
+    response.redirect(`${frontEndUrl}#/google/${request.user.username}/${request.user.name}`);
 
   });
   app.get('/auth/google/failure', (request, response) => {
