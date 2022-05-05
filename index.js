@@ -8,14 +8,16 @@ const port = process.env.PORT || 4002;
 
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const GoogleStrategy = require("passport-google-oauth2").Strategy;
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
-
+let backendUrl = "https://oliscott21-imagequiz-backend.herokuapp.com";
+let frontendUrl = "https://oliscott21.github.io/"
 //middlewares
 app.use(express.json());
 
 app.use(cors({
-  origin: "https://oliscott21.github.io",
+  origin: frontendUrl,
   credentials: true
 }));
 
@@ -40,6 +42,24 @@ passport.use(new LocalStrategy({ usernameField: "email"}, function verify(userna
         console.log(e);
         return cb("Something went wrong");
     });
+}));
+
+passport.use(new GoogleStrategy({
+    clientID:     GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: `${backendUrl}/auth/google/callback`,
+    passReqToCallback   : true
+  },
+  function (request, accessToken, refreshToken, profile, done) {
+    console.log('in Google strategy:');
+    //console.log(profile);
+    store.findOrCreateNonLocalCustomer(profile.displayName, profile.email, profile.id, profile.provider)
+      .then(x => done(null, x))
+      .catch(e => {
+        console.log(e);
+        return done('Something went wrong.');
+      });
+
 }));
 
 passport.serializeUser(function(user, cb) {
@@ -67,15 +87,7 @@ app.use(passport.session());
 
 //methods
 app.get("/", (request, response) => {
-    store.check()
-    .then ( x => {
-        console.log(x);
-        response.status(200).json({done: true, result:x.rows, message: "Welcome to imagequiz-backend API!"});
-    })
-    .catch(e => {
-      console.log(e);
-      response.status(500).json({done: false, message: "Something went wrong."});
-    });
+    response.status(200).json({done: true, message: "Welcome to imagequiz-backend API!"});
 });
 
 
@@ -91,8 +103,7 @@ app.post("/register", (request, response) => {
           } else {
               response.status(403).json({done: false, result: "Customer already exists!"});
           }
-      }
-    )
+      })
     .catch(e => {
       console.log(e);
       response.status(500).json({done: false, message: "Something went wrong."});
@@ -113,6 +124,32 @@ app.get("/login/success", (request, response) => {
 app.get("/login/failed", (request, response) => {
     response.status(401).json({done: false, result: "Credentials invalid!"});
 });
+
+application.get('/auth/google/callback',
+  passport.authenticate('google', {
+    successRedirect: '/auth/google/success',
+    failureRedirect: '/auth/google/failure'
+  }));
+
+  application.get('/auth/google/success', (request, response) => {
+    console.log('/auth/google/success');
+    console.log(request.user);
+    response.redirect(`${frontEndUrl}/#/google/${request.user.username}/${request.user.name}`);
+
+  });
+  application.get('/auth/google/failure', (request, response) => {
+    console.log('/auth/google/failure');
+    response.redirect(`${frontEndUrl}/#/google/failed`);
+  });
+
+  application.get('/isloggedin', (request, response) => {
+    if(request.isAuthenticated()) {
+      response.status(200).json({ done: true, result: true });
+    } else {
+      response.status(410).json({ done: false, result: false });
+    }
+
+    });
 
 app.post('/logout', function(request, response) {
     request.logout();
