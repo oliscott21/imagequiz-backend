@@ -22,7 +22,7 @@ let frontEndUrl = "https://oliscott21.github.io/"
 app.use(express.json());
 
 app.use(cors({
-  origin: "*",
+  origin: backendUrl,
   credentials: true
 }));
 
