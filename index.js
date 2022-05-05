@@ -1,6 +1,7 @@
 //dependacies
 const express = require("express");
 let { store } = require("./data_access/store");
+require(dotenv).config()
 
 const app = express();
 const cors = require("cors");
