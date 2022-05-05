@@ -22,15 +22,16 @@ let frontEndUrl = "https://oliscott21.github.io/"
 app.use(express.json());
 
 app.use(cors({
-  origin: frontEndUrl,
+  origin: "*",
   credentials: true
 }));
 
 app.use((request, response, next) => {
     console.log(`request url: ${request.url}`);
     console.log(`request method: ${request.method}`);
-    request.header("Access-Control-Allow-Origin", "*");
-    request.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    //request.header("Access-Control-Allow-Origin", "*");
+    //request.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    //request.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,X-Access-Token,XKey,Authorization');
     next();
 })
 
