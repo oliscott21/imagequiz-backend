@@ -11,7 +11,7 @@ const LocalStrategy = require("passport-local");
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
-let backendUrl = "https://oliscott21-imagequiz-backend.herokuapp.com";
+let backendUrl = "https://oliscott21-imagequiz-api.herokuapp.com";
 let frontendUrl = "https://oliscott21.github.io/"
 //middlewares
 app.use(express.json());
