@@ -29,10 +29,10 @@ app.use(cors({
 app.use((request, response, next) => {
     console.log(`request url: ${request.url}`);
     console.log(`request method: ${request.method}`);
-    //request.header("Access-Control-Allow-Origin", "*");
-    //request.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    //request.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,X-Access-Token,XKey,Authorization');
-    next();
+    res.header('Access-Control-Allow-Origin', backendUrl);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+next();
 })
 
 passport.use(new LocalStrategy({ usernameField: "email"}, function verify(username, password, cb) {
