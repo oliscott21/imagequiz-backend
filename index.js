@@ -17,7 +17,7 @@ let frontendUrl = "https://oliscott21.github.io/"
 app.use(express.json());
 
 app.use(cors({
-  origin: frontendUrl,
+  origin: "https://oliscott21.github.io/",
   credentials: true
 }));
 
