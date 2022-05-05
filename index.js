@@ -14,6 +14,9 @@ const SQLiteStore = require('connect-sqlite3')(session);
 let backendUrl = "https://oliscott21-imagequiz-api.herokuapp.com";
 let frontEndUrl = "https://oliscott21.github.io/"
 
+frontEndUrl = "http://localhost:3000"
+backendUrl = "http://localhost:4002"
+
 //middlewares
 app.use(express.json());
 
@@ -25,8 +28,8 @@ app.use(cors({
 app.use((request, response, next) => {
     console.log(`request url: ${request.url}`);
     console.log(`request method: ${request.method}`);
-    request.header("Access-Control-Allow-Origin", "*");
-    request.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    //request.header("Access-Control-Allow-Origin", "*");
+    //request.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 })
 
@@ -60,7 +63,6 @@ passport.use(new GoogleStrategy({
         console.log(e);
         return done('Something went wrong.');
       });
-
 }));
 
 passport.serializeUser(function(user, cb) {
@@ -77,8 +79,8 @@ passport.deserializeUser(function(user, cb) {
 
 app.use(session({
     secret: 'keyboard cat',
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     store: new SQLiteStore({ db: 'sessions.db', dir: './sessions' })
 }));
 

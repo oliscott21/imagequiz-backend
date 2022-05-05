@@ -3,7 +3,7 @@ const { Pool } = require("pg");
 require("dotenv").config();
 
 const connectionString =
-  `postgres://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}:${process.env.DATABASEPORT}/${process.env.DATABASE}`;
+  `postgres://${process.env.USERNAME}:${process.env.PASSWORD}@${process.env.HOST}:${process.env.DATABASEPORT}/${process.env.DATABASE}`;
 
 const conection = {
   connectionString: process.env.DATABASE_URL ? process.env.DATABASE_URL : connectionString,
@@ -32,7 +32,7 @@ let store = {
      },
 
     findOrCreateNonLocalCustomer: async (name, email, password, provider) => {
-        console.log('in findOrCreateNonLocalCustomer');
+      console.log('in findOrCreateNonLocalCustomer');
       console.log(name, email, password, provider);
       search = await store.findNonLocalCustomer(email, provider);
       if(search.found) {
