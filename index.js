@@ -14,8 +14,8 @@ const SQLiteStore = require('connect-sqlite3')(session);
 let backendUrl = "https://oliscott21-imagequiz-api.herokuapp.com";
 let frontEndUrl = "https://oliscott21.github.io/"
 
-frontEndUrl = "http://localhost:3000"
-backendUrl = "http://localhost:4002"
+//frontEndUrl = "http://localhost:3000"
+//backendUrl = "http://localhost:4002"
 
 //middlewares
 app.use(express.json());
